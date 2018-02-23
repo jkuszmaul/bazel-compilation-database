@@ -24,7 +24,7 @@ https://github.com/google/kythe/blob/master/tools/cpp/generate_compilation_datab
 
 CompilationAspect = provider()
 
-_cpp_extensions = ["cc", "cpp", "cxx"]
+_cpp_extensions = ["h", "hpp", "cc", "cpp", "cxx"]
 
 def _compilation_db_json(compilation_db):
     # Return a JSON string for the compilation db entries.
@@ -70,8 +70,8 @@ def _compilation_database_aspect_impl(target, ctx):
                      + (ctx.rule.attr.copts if "copts" in dir(ctx.rule.attr) else [])
                      + cpp_fragment.unfiltered_compiler_options(ctx.features))
 
-    # system built-in directories (helpful for macOS).
-    if cpp_fragment.libc == "macosx":
+    # system built-in directories (helpful for C++11+).
+    if cpp_fragment.libc == "macosx" or True:
         compile_flags += ["-isystem " + str(d)
                           for d in cpp_fragment.built_in_include_directories]
 
